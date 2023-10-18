@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"sync"
 )
@@ -29,11 +29,11 @@ func main() {
 				backendURL := backendServers[j%len(backendServers)]
 				resp, err := http.Get(backendURL)
 				if err != nil {
-					fmt.Printf("Client %d: Error making request to %s: %v\n", clientID, backendURL, err)
+					log.Printf("Client %d: Error making request to %s: %v\n", clientID, backendURL, err)
 					continue
 				}
 				defer resp.Body.Close()
-				fmt.Printf("Client %d: Request to %s returned status code %d\n", clientID, backendURL, resp.StatusCode)
+				log.Printf("Client %d: Request to %s returned status code %d\n", clientID, backendURL, resp.StatusCode)
 			}
 		}(i)
 	}
