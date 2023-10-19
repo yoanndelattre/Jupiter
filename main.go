@@ -5,19 +5,20 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 
 	"golang.org/x/net/proxy"
 )
 
 func main() {
-	targetURL := flag.String("target", "https://www.google.com", "Target URL for the load balancer")
-	proxyAddr := flag.String("proxy", "", "SOCKS5 proxy address (e.g., 127.0.0.1:1080)")
+	targetURL := os.Getenv("TARGET_URL")   // Target URL for the load balancer
+	proxyAddr := os.Getenv("SOCKS5_PROXY") // e.g., 127.0.0.1:1080
 	flag.Parse()
 
 	var dialer proxy.Dialer
-	if *proxyAddr != "" {
+	if proxyAddr != "" {
 		// Initialize SOCKS5 proxy dialer if proxy is set.
-		proxyURL, err := url.Parse("socks5://" + *proxyAddr)
+		proxyURL, err := url.Parse("socks5://" + proxyAddr)
 		if err != nil {
 			log.Fatalf("Error parsing proxy address: %v", err)
 		}
@@ -40,7 +41,7 @@ func main() {
 
 	// Start the test.
 	for {
-		sendRequest(httpClient, *targetURL)
+		sendRequest(httpClient, targetURL)
 	}
 }
 
