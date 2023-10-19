@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"net/http"
 	"net/url"
@@ -13,7 +12,6 @@ import (
 func main() {
 	targetURL := os.Getenv("TARGET_URL")   // Target URL for the load balancer
 	proxyAddr := os.Getenv("SOCKS5_PROXY") // e.g., 127.0.0.1:1080
-	flag.Parse()
 
 	var dialer proxy.Dialer
 	if proxyAddr != "" {
