@@ -32,6 +32,16 @@ func main() {
 		}
 	}
 
+	// Wait for the proxy connection to become available with a retry mechanism.
+	for dialer != nil {
+		err := testProxyConnection(dialer)
+		if err == nil {
+			break
+		}
+		log.Printf("Proxy connection failed: %v. Retrying in 5 seconds...", err)
+		time.Sleep(5 * time.Second)
+	}
+
 	// Create an HTTP client with or without the proxy dialer.
 	httpClient := &http.Client{
 		Timeout: time.Second * 5,
@@ -53,6 +63,15 @@ func main() {
 	for {
 		sendRequest(httpClient, targetURL)
 	}
+}
+
+func testProxyConnection(dialer proxy.Dialer) error {
+	conn, err := dialer.Dial("tcp", "bitcoin.org:80")
+	if err != nil {
+		return err
+	}
+	conn.Close()
+	return nil
 }
 
 func sendRequest(client *http.Client, targetURL string) {
