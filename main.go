@@ -1,10 +1,12 @@
 package main
 
 import (
+	"crypto/tls"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"time"
 
 	"golang.org/x/net/proxy"
 )
@@ -31,13 +33,19 @@ func main() {
 	}
 
 	// Create an HTTP client with or without the proxy dialer.
-	httpClient := &http.Client{}
+	httpClient := &http.Client{
+		Timeout: time.Second * 5,
+	}
 	if dialer != nil {
 		httpClient.Transport = &http.Transport{
-			Dial: dialer.Dial,
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			Dial:            dialer.Dial,
 		}
 		log.Printf("The SOCKS5 proxy is set\n")
 	} else {
+		httpClient.Transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
 		log.Printf("The SOCKS5 proxy is not set\n")
 	}
 
