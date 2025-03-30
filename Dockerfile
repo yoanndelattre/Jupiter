@@ -1,4 +1,4 @@
-FROM golang:onbuild AS build
+FROM golang:latest AS build
 WORKDIR /app
 COPY . .
 RUN CGO_ENABLED=0 go build -o jupiter

@@ -1,5 +1,5 @@
 module github.com/yoanndelattre/Jupiter
 
-go 1.18
+go 1.22
 
-require golang.org/x/net v0.17.0 // indirect
+require golang.org/x/net v0.17.0
